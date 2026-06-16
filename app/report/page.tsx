@@ -8,7 +8,8 @@ import { GrowthTree } from "@/components/GrowthTree";
 import { Button } from "@/components/ui/button";
 import { attributeLabels } from "@/lib/data";
 import { loadSave, resetSave } from "@/lib/storage";
-import { SaveState } from "@/lib/types";
+import { ChapterId, SaveState } from "@/lib/types";
+import { wordChapters } from "@/lib/wordData";
 
 export default function Report() {
   const [save, setSave] = useState<SaveState | null>(null);
@@ -24,6 +25,31 @@ export default function Report() {
   }, [save]);
 
   if (!save) return null;
+
+  if (!save.unlockedReport) {
+    const requiredChapter =
+      wordChapters.find((chapter) => !hasCompletedChapter(save, chapter.id)) ??
+      wordChapters[wordChapters.length - 1];
+
+    return (
+      <main className="grid min-h-screen place-items-center bg-ease-paper px-5 text-center text-ease-ink">
+        <section className="max-w-xl rounded-[8px] border border-ease-mist bg-white/72 p-7 shadow-soft">
+          <p className="text-sm tracking-[.16em] text-ease-blue">
+            成长轨迹尚未生成
+          </p>
+          <h1 className="mt-3 font-serif text-3xl">
+            请先完成{requiredChapter.subtitle}中的一个场景
+          </h1>
+          <p className="mt-4 text-sm leading-7 text-ease-ink/64">
+            三个副本都完成后，系统才会整理你的选择路径、属性变化和最后一封未来来信。
+          </p>
+          <Link href={`/journey/${requiredChapter.id}`} className="mt-6 inline-block">
+            <Button>继续当前旅程</Button>
+          </Link>
+        </section>
+      </main>
+    );
+  }
 
   const final = `亲爱的你：
 
@@ -91,4 +117,8 @@ export default function Report() {
       </div>
     </main>
   );
+}
+
+function hasCompletedChapter(save: SaveState, chapterId: ChapterId) {
+  return save.choices.some((choice) => choice.chapterId === chapterId);
 }

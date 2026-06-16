@@ -55,11 +55,43 @@ export default function ChapterPage() {
 
   const currentIndex = wordChapters.findIndex((item) => item.id === chapter.id);
   const nextChapter = wordChapters[currentIndex + 1];
+  const previousChapters = wordChapters.slice(0, Math.max(0, currentIndex));
 
   if (!save) {
     return (
       <main className="grid min-h-screen place-items-center bg-ease-paper text-ease-ink">
         正在打开你的故事...
+      </main>
+    );
+  }
+
+  const completedCurrentChapter = hasCompletedChapter(save, chapter.id);
+  const canGoNext = Boolean(nextChapter && completedCurrentChapter);
+  const canViewReport = hasCompletedChapter(save, "childhood");
+  const canAccessChapter = previousChapters.every((item) =>
+    hasCompletedChapter(save, item.id),
+  );
+
+  if (!canAccessChapter) {
+    const requiredChapter =
+      previousChapters.find((item) => !hasCompletedChapter(save, item.id)) ??
+      wordChapters[0];
+    return (
+      <main className="grid min-h-screen place-items-center bg-ease-paper px-5 text-center text-ease-ink">
+        <section className="max-w-xl rounded-[8px] border border-ease-mist bg-white/72 p-7 shadow-soft">
+          <p className="text-sm tracking-[.16em] text-ease-blue">
+            旅程需要按顺序展开
+          </p>
+          <h1 className="mt-3 font-serif text-3xl">
+            请先完成{requiredChapter.subtitle}中的一个场景
+          </h1>
+          <p className="mt-4 text-sm leading-7 text-ease-ink/64">
+            Take Ease 会从当下开始，再慢慢回到更早的时刻。每个副本至少完成一个场景后，下一站才会开启。
+          </p>
+          <Link href={`/journey/${requiredChapter.id}`} className="mt-6 inline-block">
+            <Button>前往{requiredChapter.subtitle}</Button>
+          </Link>
+        </section>
       </main>
     );
   }
@@ -89,12 +121,14 @@ export default function ChapterPage() {
                 首页
               </Button>
             </Link>
-            <Link href="/report">
-              <Button variant="ghost">
-                <Sparkles size={17} />
-                查看轨迹
-              </Button>
-            </Link>
+            {canViewReport && (
+              <Link href="/report">
+                <Button variant="ghost">
+                  <Sparkles size={17} />
+                  查看成长轨迹
+                </Button>
+              </Link>
+            )}
           </div>
           <p className="mt-8 text-sm tracking-[.18em] text-ease-blue">
             {chapter.emoji} {chapter.subtitle}
@@ -121,7 +155,7 @@ export default function ChapterPage() {
             <p className="text-sm text-ease-ink/55">选择一个场景进入</p>
             <h2 className="mt-1 text-2xl font-semibold">多场景窗口</h2>
           </div>
-          {nextChapter && (
+          {canGoNext && nextChapter && (
             <button
               onClick={() => router.push(`/journey/${nextChapter.id}`)}
               className="hidden rounded-[8px] border border-ease-mist bg-white/60 px-4 py-2 text-sm text-ease-ink/70 transition hover:bg-white md:block"
@@ -167,7 +201,7 @@ export default function ChapterPage() {
             );
           })}
         </div>
-        {nextChapter && (
+        {canGoNext && nextChapter && (
           <div className="mt-8 md:hidden">
             <Button
               variant="paper"
@@ -181,6 +215,10 @@ export default function ChapterPage() {
       </section>
     </main>
   );
+}
+
+function hasCompletedChapter(save: SaveState, chapterId: ChapterId) {
+  return save.choices.some((choice) => choice.chapterId === chapterId);
 }
 
 function SceneReader({

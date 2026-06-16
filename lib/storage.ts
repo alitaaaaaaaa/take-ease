@@ -68,7 +68,19 @@ export function applyChoice(
         effects: choice.effects,
       },
     ],
-    unlockedReport: completed.length >= 6,
+    unlockedReport: hasCompletedRequiredChapters([
+      ...previous,
+      {
+        sceneId,
+        chapterId,
+        title: sceneTitle,
+        choiceId: choice.id,
+        choice: choice.text,
+        tag: choice.tag,
+        letter: choice.letter,
+        effects: choice.effects,
+      },
+    ]),
   };
 }
 
@@ -103,7 +115,19 @@ export function recordWordChoice(
         effects: score.effects,
       },
     ],
-    unlockedReport: completed.length >= 3,
+    unlockedReport: hasCompletedRequiredChapters([
+      ...previous,
+      {
+        sceneId,
+        chapterId,
+        title: sceneTitle,
+        choiceId: choice.id,
+        choice: choice.title,
+        tag: score.reason,
+        letter: choice.paragraphs.join("\n\n"),
+        effects: score.effects,
+      },
+    ]),
   };
 }
 
@@ -135,6 +159,12 @@ function clamp(value: number) {
   return Math.max(0, Math.min(100, value));
 }
 
+function hasCompletedRequiredChapters(choices: SaveState["choices"]) {
+  return (["university", "teen", "childhood"] as ChapterId[]).every((chapterId) =>
+    choices.some((choice) => choice.chapterId === chapterId),
+  );
+}
+
 function normalizeSave(save: SaveState): SaveState {
   const choices = save.choices.map((choice) => {
     if (choice.effects && Object.keys(choice.effects).length > 0) {
@@ -153,5 +183,10 @@ function normalizeSave(save: SaveState): SaveState {
     { ...initialAttributes },
   );
 
-  return { ...save, choices, attributes };
+  return {
+    ...save,
+    choices,
+    attributes,
+    unlockedReport: hasCompletedRequiredChapters(choices),
+  };
 }
