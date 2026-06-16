@@ -9,7 +9,7 @@ import { loadSave, persistSave, recordWordChoice } from "@/lib/storage";
 import { attributeLabels } from "@/lib/data";
 import { scoreWordChoice } from "@/lib/scoring";
 import { getTeenChoiceParagraphs } from "@/lib/teenCopy";
-import { SaveState, WordChoice, WordScene } from "@/lib/types";
+import { ChapterId, SaveState, WordChoice, WordScene } from "@/lib/types";
 import { wordChapterMap, wordChapters } from "@/lib/wordData";
 
 export default function ChapterPage() {
@@ -67,6 +67,7 @@ export default function ChapterPage() {
   if (activeScene) {
     return (
       <SceneReader
+        chapterId={chapter.id}
         scene={activeScene}
         picked={picked}
         completed={save.completedScenes.includes(activeScene.id)}
@@ -183,12 +184,14 @@ export default function ChapterPage() {
 }
 
 function SceneReader({
+  chapterId,
   scene,
   picked,
   completed,
   onPick,
   onBack,
 }: {
+  chapterId: ChapterId;
   scene: WordScene;
   picked: WordChoice | null;
   completed: boolean;
@@ -266,7 +269,7 @@ function SceneReader({
             </aside>
           </div>
         ) : (
-          <ResultView choice={picked} onBack={onBack} />
+          <ResultView chapterId={chapterId} choice={picked} onBack={onBack} />
         )}
       </section>
     </main>
@@ -274,14 +277,17 @@ function SceneReader({
 }
 
 function ResultView({
+  chapterId,
   choice,
   onBack,
 }: {
+  chapterId: ChapterId;
   choice: WordChoice;
   onBack: () => void;
 }) {
   const split = splitChoice(choice);
-  const score = scoreWordChoice("university", "", choice);
+  const score = scoreWordChoice(chapterId, "", choice);
+  const isChildhoodFinal = chapterId === "childhood";
   return (
     <article className="rounded-[8px] border border-ease-mist bg-white/78 p-5 shadow-soft md:p-8">
       <p className="text-sm text-ease-ink/55">可能的结果</p>
@@ -304,9 +310,29 @@ function ResultView({
         </div>
         <p className="mt-3 text-sm leading-7 text-ease-ink/62">{score.reason}</p>
       </div>
-      <Button className="mt-7" onClick={onBack}>
-        回到当前副本场景窗口
-      </Button>
+      {isChildhoodFinal ? (
+        <div className="mt-7 rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5 text-center md:p-6">
+          <p className="text-sm tracking-[.16em] text-ease-blue">童年副本已完成</p>
+          <h3 className="mt-2 font-serif text-2xl text-ease-ink">
+            现在，你可以回看这一站，也可以整理完整的成长轨迹。
+          </h3>
+          <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+            <Button className="min-h-12 px-6" onClick={onBack}>
+              回到童年副本
+            </Button>
+            <Link href="/report">
+              <Button variant="paper" className="min-h-12 w-full px-6 sm:w-auto">
+                <Sparkles size={17} />
+                查看成长轨迹
+              </Button>
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <Button className="mt-7" onClick={onBack}>
+          回到当前副本场景窗口
+        </Button>
+      )}
     </article>
   );
 }
