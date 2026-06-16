@@ -1,0 +1,387 @@
+"use client";
+
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Check, Home, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { loadSave, persistSave, recordWordChoice } from "@/lib/storage";
+import { attributeLabels } from "@/lib/data";
+import { scoreWordChoice } from "@/lib/scoring";
+import { getTeenChoiceParagraphs } from "@/lib/teenCopy";
+import { SaveState, WordChoice, WordScene } from "@/lib/types";
+import { wordChapterMap, wordChapters } from "@/lib/wordData";
+
+export default function ChapterPage() {
+  const params = useParams<{ chapter: string }>();
+  const router = useRouter();
+  const chapter = wordChapterMap[params.chapter];
+  const [save, setSave] = useState<SaveState | null>(null);
+  const [activeSceneId, setActiveSceneId] = useState<string | null>(null);
+  const [picked, setPicked] = useState<WordChoice | null>(null);
+
+  useEffect(() => setSave(loadSave()), []);
+
+  const activeScene = useMemo(
+    () => chapter?.scenes.find((scene) => scene.id === activeSceneId) ?? null,
+    [chapter, activeSceneId],
+  );
+
+  if (!chapter) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-ease-paper px-6 text-center text-ease-ink">
+        <div>
+          <p className="font-serif text-3xl">这封信暂时没有寄到</p>
+          <Link href="/" className="mt-6 inline-block">
+            <Button>回到首页</Button>
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  const choose = (scene: WordScene, choice: WordChoice) => {
+    if (!save) return;
+    const next = recordWordChoice(save, chapter.id, scene.id, scene.title, choice);
+    persistSave(next);
+    setSave(next);
+    setPicked(choice);
+  };
+
+  const backToHub = () => {
+    setPicked(null);
+    setActiveSceneId(null);
+  };
+
+  const currentIndex = wordChapters.findIndex((item) => item.id === chapter.id);
+  const nextChapter = wordChapters[currentIndex + 1];
+
+  if (!save) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-ease-paper text-ease-ink">
+        正在打开你的故事...
+      </main>
+    );
+  }
+
+  if (activeScene) {
+    return (
+      <SceneReader
+        scene={activeScene}
+        picked={picked}
+        completed={save.completedScenes.includes(activeScene.id)}
+        onPick={(choice) => choose(activeScene, choice)}
+        onBack={backToHub}
+      />
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-ease-paper text-ease-ink">
+      <section className="relative overflow-hidden border-b border-ease-mist/70 bg-gradient-to-br from-[#FAF8F4] via-[#F5EEDC] to-[#E8F0EE] px-4 py-10 md:px-8">
+        <div className="absolute inset-0 opacity-20 [background-image:url('/assets/paper-grain.png')]" />
+        <div className="relative mx-auto max-w-6xl">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link href="/">
+              <Button variant="paper">
+                <Home size={17} />
+                首页
+              </Button>
+            </Link>
+            <Link href="/report">
+              <Button variant="ghost">
+                <Sparkles size={17} />
+                查看轨迹
+              </Button>
+            </Link>
+          </div>
+          <p className="mt-8 text-sm tracking-[.18em] text-ease-blue">
+            {chapter.emoji} {chapter.subtitle}
+          </p>
+          <h1 className="mt-3 font-serif text-4xl md:text-6xl">
+            {chapter.title}
+          </h1>
+          <p className="mt-5 max-w-3xl text-lg leading-9 text-ease-ink/70">
+            {chapter.intro}
+          </p>
+          <div className="mt-7 max-h-44 max-w-4xl overflow-auto rounded-[8px] border border-white/70 bg-white/45 p-4 text-sm leading-7 text-ease-ink/68 shadow-soft backdrop-blur">
+            {chapter.overview.map((paragraph, index) => (
+              <p key={index} className="mb-3 last:mb-0">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-8 md:px-8">
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm text-ease-ink/55">选择一个场景进入</p>
+            <h2 className="mt-1 text-2xl font-semibold">多场景窗口</h2>
+          </div>
+          {nextChapter && (
+            <button
+              onClick={() => router.push(`/journey/${nextChapter.id}`)}
+              className="hidden rounded-[8px] border border-ease-mist bg-white/60 px-4 py-2 text-sm text-ease-ink/70 transition hover:bg-white md:block"
+            >
+              前往{nextChapter.subtitle}
+            </button>
+          )}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {chapter.scenes.map((scene) => {
+            const completed = save.completedScenes.includes(scene.id);
+            return (
+              <button
+                key={scene.id}
+                onClick={() => {
+                  setPicked(null);
+                  setActiveSceneId(scene.id);
+                }}
+                className="group overflow-hidden rounded-[8px] border border-ease-mist bg-white/70 text-left shadow-soft transition hover:-translate-y-0.5 hover:bg-white"
+              >
+                <div
+                  className="aspect-[4/3] bg-cover bg-center"
+                  style={{ backgroundImage: `url(${scene.image})` }}
+                />
+                <div className="p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-3xl">{scene.emoji}</span>
+                    {completed && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-ease-sage/20 px-3 py-1 text-xs text-ease-ink/70">
+                        <Check size={14} />
+                        已体验
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="mt-4 text-xl font-semibold leading-8">
+                    {getSimpleSceneTitle(scene.title)}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-sm leading-7 text-ease-ink/62">
+                    {getDisplayParagraphs(scene.intro).join(" ")}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        {nextChapter && (
+          <div className="mt-8 md:hidden">
+            <Button
+              variant="paper"
+              className="w-full"
+              onClick={() => router.push(`/journey/${nextChapter.id}`)}
+            >
+              前往{nextChapter.subtitle}
+            </Button>
+          </div>
+        )}
+      </section>
+    </main>
+  );
+}
+
+function SceneReader({
+  scene,
+  picked,
+  completed,
+  onPick,
+  onBack,
+}: {
+  scene: WordScene;
+  picked: WordChoice | null;
+  completed: boolean;
+  onPick: (choice: WordChoice) => void;
+  onBack: () => void;
+}) {
+  return (
+    <main className="min-h-screen bg-ease-paper px-4 py-6 text-ease-ink md:px-8">
+      <section className="mx-auto max-w-5xl">
+        <Button variant="paper" onClick={onBack}>
+          <ArrowLeft size={17} />
+          返回当前副本
+        </Button>
+        <div className="mt-6 overflow-hidden rounded-[8px] border border-ease-mist bg-white/72 shadow-soft">
+          <div className="grid md:grid-cols-[0.95fr_1.05fr]">
+            <div
+              className="aspect-[4/3] bg-cover bg-center md:h-full md:min-h-[360px]"
+              style={{ backgroundImage: `url(${scene.image})` }}
+            />
+            <div className="flex flex-col justify-center p-5 md:p-8">
+              <div className="flex items-center gap-3">
+                <p className="text-4xl">{scene.emoji}</p>
+                {completed && (
+                  <p className="inline-flex items-center gap-2 rounded-full bg-ease-sage/20 px-3 py-1 text-sm text-ease-ink/70">
+                    <Check size={15} />
+                    已体验
+                  </p>
+                )}
+              </div>
+              <h1 className="mt-4 font-serif text-3xl leading-tight md:text-4xl">
+                {getSimpleSceneTitle(scene.title)}
+              </h1>
+              <div className="mt-5 text-sm leading-7 text-ease-ink/72 md:text-base md:leading-8">
+                <TextBlock paragraphs={getDisplayParagraphs(scene.intro)} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="mx-auto mt-6 max-w-5xl pb-12">
+        {!picked ? (
+          <div className="space-y-6">
+            <aside className="mx-auto max-w-2xl rounded-[8px] border border-ease-mist bg-white/72 p-5 shadow-soft md:p-6">
+              <p className="text-center text-sm text-ease-ink/55">选项</p>
+              <div className="mt-4 space-y-4">
+                {scene.choices.map((choice) => {
+                  const split = splitChoice(choice);
+                  return (
+                    <button
+                      key={choice.id}
+                      onClick={() =>
+                        onPick({
+                          ...choice,
+                          paragraphs: getTeenChoiceParagraphs(choice),
+                        })
+                      }
+                      className="w-full rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-ease-blue hover:bg-white hover:shadow-soft"
+                    >
+                      <span className="text-base font-semibold leading-7">
+                        {getSimpleChoiceTitle(choice.title)}
+                      </span>
+                      {split.description.length > 0 && (
+                        <span className="mt-3 block space-y-2 text-sm leading-7 text-ease-ink/68">
+                          {split.description.map((paragraph, index) => (
+                            <span key={index} className="block whitespace-pre-line">
+                              {paragraph}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </aside>
+          </div>
+        ) : (
+          <ResultView choice={picked} onBack={onBack} />
+        )}
+      </section>
+    </main>
+  );
+}
+
+function ResultView({
+  choice,
+  onBack,
+}: {
+  choice: WordChoice;
+  onBack: () => void;
+}) {
+  const split = splitChoice(choice);
+  const score = scoreWordChoice("university", "", choice);
+  return (
+    <article className="rounded-[8px] border border-ease-mist bg-white/78 p-5 shadow-soft md:p-8">
+      <p className="text-sm text-ease-ink/55">可能的结果</p>
+      <h2 className="mt-2 text-2xl font-semibold leading-9">{choice.title}</h2>
+      <div className="mt-6 rounded-[8px] bg-[#FFF8E8] p-5">
+        <TextBlock paragraphs={split.result.length ? split.result : choice.paragraphs} />
+      </div>
+      <div className="mt-5 rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5">
+        <p className="text-sm font-medium text-ease-ink">本次选择影响</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {Object.entries(score.effects).map(([key, value]) => (
+            <span
+              key={key}
+              className="rounded-full bg-white px-3 py-1 text-xs text-ease-ink/72"
+            >
+              {attributeLabels[key as keyof typeof attributeLabels]}{" "}
+              {Number(value) > 0 ? `+${value}` : value}
+            </span>
+          ))}
+        </div>
+        <p className="mt-3 text-sm leading-7 text-ease-ink/62">{score.reason}</p>
+      </div>
+      <Button className="mt-7" onClick={onBack}>
+        回到当前副本场景窗口
+      </Button>
+    </article>
+  );
+}
+
+function splitChoice(choice: WordChoice) {
+  const paragraphs = getTeenChoiceParagraphs(choice);
+  const resultIndex = paragraphs.findIndex((paragraph) => {
+    const text = paragraph.trim();
+    return (
+      text.startsWith("可能的结果") ||
+      text.startsWith("结果") ||
+      text.startsWith("来自未来的信")
+    );
+  });
+
+  if (resultIndex === -1) {
+    return { description: paragraphs, result: [] };
+  }
+
+  return {
+    description: paragraphs.slice(0, resultIndex),
+    result: paragraphs.slice(resultIndex),
+  };
+}
+
+function getSimpleSceneTitle(title: string) {
+  const normalized = title
+    .replace(/^📌\s*/, "")
+    .replace(/^场景[一二三四五六七八九十]+[:：]\s*/, "")
+    .trim();
+
+  const custom: Array<[string, string]> = [
+    ["保研", "保研-边缘焦虑"],
+    ["实习", "实习-面试焦虑"],
+    ["留学", "留学-离开与选择"],
+    ["就业", "就业-求职焦虑"],
+    ["转学", "转学-不适应"],
+    ["坐在角落", "转学-不适应"],
+    ["成绩单", "成绩-被评价"],
+    ["走廊", "少年的情愫"],
+    ["我是谁", "高三-未来方向"],
+    ["试卷", "成绩-不完美"],
+    ["小朋友", "表现-被看见"],
+    ["操场", "同伴-想加入"],
+    ["画笔", "兴趣-被收起"],
+  ];
+
+  const found = custom.find(([keyword]) => normalized.includes(keyword));
+  if (found) return found[1];
+
+  return normalized
+    .replace(/[（(].*?[）)]/g, "")
+    .replace(/——/g, "-")
+    .slice(0, 16);
+}
+
+function getSimpleChoiceTitle(title: string) {
+  return title.replace(/^.*?选项[一二三四五六七八九十]+[:：]\s*/, "").trim();
+}
+
+function getDisplayParagraphs(paragraphs: string[]) {
+  return paragraphs.filter((paragraph) => {
+    const text = paragraph.replace(/^>\s*/, "").trim();
+    return text !== "进场旁白";
+  });
+}
+
+function TextBlock({ paragraphs }: { paragraphs: string[] }) {
+  return (
+    <div className="space-y-4 text-[15px] leading-8 text-ease-ink/76">
+      {paragraphs.map((paragraph, index) => (
+        <p key={index} className="whitespace-pre-line">
+          {paragraph}
+        </p>
+      ))}
+    </div>
+  );
+}

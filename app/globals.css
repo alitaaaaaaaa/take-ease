@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root { color-scheme: light; --radius: 8px; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin:0; background:#FAF8F4; color:#3A3A3A; }
+button, a { -webkit-tap-highlight-color: transparent; }
+::selection { background:#89A8B244; }
+.noise:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:url('/assets/paper-grain.png');opacity:.16;mix-blend-mode:multiply}
+.type-caret:after{content:"";display:inline-block;width:7px;height:1em;margin-left:4px;background:#89A8B2;vertical-align:-2px;animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}

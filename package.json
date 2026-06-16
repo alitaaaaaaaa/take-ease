@@ -1,0 +1,8 @@
+{
+  "name": "take-ease",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {"dev":"next dev","build":"next build","start":"next start","lint":"next lint"},
+  "dependencies": {"@next/third-parties":"latest","class-variance-authority":"^0.7.1","clsx":"^2.1.1","framer-motion":"^11.18.2","lucide-react":"^0.468.0","next":"latest","react":"latest","react-dom":"latest","recharts":"^2.15.0","tailwind-merge":"^2.5.5"},
+  "devDependencies": {"@types/node":"latest","@types/react":"latest","@types/react-dom":"latest","autoprefixer":"^10.4.20","eslint":"latest","eslint-config-next":"latest","postcss":"^8.4.49","tailwindcss":"^3.4.17","typescript":"latest"}
+}
