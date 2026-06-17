@@ -293,13 +293,13 @@ function SceneReader({
                           paragraphs: getTeenChoiceParagraphs(choice),
                         })
                       }
-                      className="w-full rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-ease-blue hover:bg-white hover:shadow-soft"
+                      className="group w-full overflow-hidden rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-ease-blue hover:bg-white hover:shadow-soft focus:border-ease-blue focus:bg-white focus:shadow-soft focus:outline-none"
                     >
                       <span className="text-base font-semibold leading-7">
                         {getSimpleChoiceTitle(choice.title)}
                       </span>
                       {split.description.length > 0 && (
-                        <span className="mt-3 block space-y-2 text-sm leading-7 text-ease-ink/68">
+                        <span className="block max-h-0 space-y-2 overflow-hidden text-sm leading-7 text-ease-ink/68 opacity-0 transition-all duration-300 ease-out group-hover:mt-3 group-hover:max-h-96 group-hover:opacity-100 group-focus:mt-3 group-focus:max-h-96 group-focus:opacity-100">
                           {split.description.map((paragraph, index) => (
                             <span key={index} className="block whitespace-pre-line">
                               {paragraph}
