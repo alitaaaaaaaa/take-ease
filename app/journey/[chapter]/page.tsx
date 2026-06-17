@@ -250,9 +250,9 @@ function SceneReader({
           <ArrowLeft size={17} />
           返回当前副本
         </Button>
-        <div className="mt-6 grid gap-5 md:grid-cols-[minmax(280px,0.9fr)_minmax(360px,1.1fr)] md:items-stretch">
+        <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(280px,0.9fr)_minmax(360px,1.1fr)] lg:items-stretch">
           <div
-            className="min-h-[260px] overflow-hidden rounded-[8px] border border-ease-mist bg-cover bg-center shadow-soft md:min-h-[430px]"
+            className="min-h-[260px] overflow-hidden rounded-[8px] border border-ease-mist bg-cover bg-center shadow-soft lg:min-h-[430px]"
             style={{ backgroundImage: `url(${scene.image})` }}
             aria-hidden
           />
@@ -353,19 +353,19 @@ function ResultView({
       <h2 className="mt-2 text-3xl font-bold leading-10 text-[#5f7f88]">
         {choice.title}
       </h2>
-      <div className="mt-6 overflow-hidden rounded-[8px] bg-[#FFF8E8]">
-        <div className="grid md:grid-cols-[0.85fr_1.15fr]">
-          <div
-            className="aspect-[4/3] bg-cover bg-center md:h-full md:min-h-[300px]"
-            style={{ backgroundImage: `url(${scene.image})` }}
-            aria-hidden
-          />
-          <div className="p-5 md:p-6">
-            {resultCopy.lead && (
-              <p className="mb-5 text-2xl font-bold leading-9 text-[#5f7f88] md:text-3xl md:leading-10">
-                {resultCopy.lead}
-              </p>
-            )}
+        <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(280px,0.9fr)_minmax(360px,1.1fr)] lg:items-start">
+        <div
+          className="min-h-[260px] rounded-[8px] border border-ease-mist bg-cover bg-center shadow-soft lg:min-h-[380px]"
+          style={{ backgroundImage: `url(${scene.image})` }}
+          aria-hidden
+        />
+        <div className="min-w-0 rounded-[8px] border border-ease-mist bg-[#FFF8E8] p-5 shadow-soft md:p-6">
+          {resultCopy.lead && (
+            <p className="mb-5 break-words text-2xl font-bold leading-9 text-[#5f7f88] md:text-3xl md:leading-10">
+              {resultCopy.lead}
+            </p>
+          )}
+          <div className="max-w-prose">
             <TextBlock paragraphs={resultCopy.rest} />
           </div>
         </div>
