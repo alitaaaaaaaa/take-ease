@@ -194,7 +194,7 @@ export default function ChapterPage() {
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-4 text-2xl font-bold leading-9 text-ease-blue md:text-[28px]">
+                  <h3 className="mt-4 text-2xl font-bold leading-9 text-[#5f7f88] md:text-[28px]">
                     {getSimpleSceneTitle(scene.title)}
                   </h3>
                   <p className="mt-2 line-clamp-3 text-sm leading-7 text-ease-ink/62">
@@ -266,7 +266,7 @@ function SceneReader({
                   </p>
                 )}
               </div>
-              <h1 className="mt-4 font-serif text-4xl font-bold leading-tight text-ease-blue md:text-5xl">
+              <h1 className="mt-4 font-serif text-4xl font-bold leading-tight text-[#5f7f88] md:text-5xl">
                 {getSimpleSceneTitle(scene.title)}
               </h1>
               <div className="mt-5 text-sm leading-7 text-ease-ink/72 md:text-base md:leading-8">
@@ -295,7 +295,7 @@ function SceneReader({
                       }
                       className="group w-full overflow-hidden rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-ease-blue hover:bg-white hover:shadow-soft focus:border-ease-blue focus:bg-white focus:shadow-soft focus:outline-none"
                     >
-                      <span className="block text-xl font-bold leading-8 text-ease-blue md:text-2xl">
+                      <span className="block text-xl font-bold leading-8 text-[#5f7f88] md:text-2xl">
                         {getSimpleChoiceTitle(choice.title)}
                       </span>
                       {split.description.length > 0 && (
@@ -314,7 +314,12 @@ function SceneReader({
             </aside>
           </div>
         ) : (
-          <ResultView chapterId={chapterId} choice={picked} onBack={onBack} />
+          <ResultView
+            chapterId={chapterId}
+            scene={scene}
+            choice={picked}
+            onBack={onBack}
+          />
         )}
       </section>
     </main>
@@ -323,22 +328,42 @@ function SceneReader({
 
 function ResultView({
   chapterId,
+  scene,
   choice,
   onBack,
 }: {
   chapterId: ChapterId;
+  scene: WordScene;
   choice: WordChoice;
   onBack: () => void;
 }) {
   const split = splitChoice(choice);
+  const resultParagraphs = split.result.length ? split.result : choice.paragraphs;
+  const resultCopy = splitResultLead(resultParagraphs);
   const score = scoreWordChoice(chapterId, "", choice);
   const isChildhoodFinal = chapterId === "childhood";
   return (
     <article className="rounded-[8px] border border-ease-mist bg-white/78 p-5 shadow-soft md:p-8">
       <p className="text-sm text-ease-ink/55">可能的结果</p>
-      <h2 className="mt-2 text-2xl font-semibold leading-9">{choice.title}</h2>
-      <div className="mt-6 rounded-[8px] bg-[#FFF8E8] p-5">
-        <TextBlock paragraphs={split.result.length ? split.result : choice.paragraphs} />
+      <h2 className="mt-2 text-3xl font-bold leading-10 text-[#5f7f88]">
+        {choice.title}
+      </h2>
+      <div className="mt-6 overflow-hidden rounded-[8px] bg-[#FFF8E8]">
+        <div className="grid md:grid-cols-[0.85fr_1.15fr]">
+          <div
+            className="aspect-[4/3] bg-cover bg-center md:h-full md:min-h-[300px]"
+            style={{ backgroundImage: `url(${scene.image})` }}
+            aria-hidden
+          />
+          <div className="p-5 md:p-6">
+            {resultCopy.lead && (
+              <p className="mb-5 text-2xl font-bold leading-9 text-[#5f7f88] md:text-3xl md:leading-10">
+                {resultCopy.lead}
+              </p>
+            )}
+            <TextBlock paragraphs={resultCopy.rest} />
+          </div>
+        </div>
       </div>
       <div className="mt-5 rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5">
         <p className="text-sm font-medium text-ease-ink">本次选择影响</p>
@@ -401,6 +426,31 @@ function splitChoice(choice: WordChoice) {
     description: paragraphs.slice(0, resultIndex),
     result: paragraphs.slice(resultIndex),
   };
+}
+
+function splitResultLead(paragraphs: string[]) {
+  const clean = paragraphs
+    .map((paragraph) =>
+      paragraph.replace(/^(可能的结果|结果)\s*[:：]?\s*/, "").trim(),
+    )
+    .filter(Boolean);
+
+  if (clean.length === 0) {
+    return { lead: "", rest: [] };
+  }
+
+  const first = clean[0];
+  const match = first.match(/^(.+?[。！？!?])\s*([\s\S]*)$/);
+
+  if (!match) {
+    return { lead: first, rest: clean.slice(1) };
+  }
+
+  const rest = [match[2], ...clean.slice(1)].filter((paragraph) =>
+    paragraph.trim(),
+  );
+
+  return { lead: match[1], rest };
 }
 
 function getSimpleSceneTitle(title: string) {

@@ -36,16 +36,6 @@ export function JourneyProgress({ current, save }: JourneyProgressProps) {
           </p>
         </div>
         <div className="relative">
-          <div className="absolute left-4 right-4 top-5 hidden h-px bg-ease-mist md:block" />
-          <div
-            className="absolute left-4 top-5 hidden h-px bg-ease-blue transition-all duration-500 md:block"
-            style={{
-              width:
-                activeIndex <= 0
-                  ? "0%"
-                  : `${(activeIndex / Math.max(steps.length - 1, 1)) * 100}%`,
-            }}
-          />
           <ol className="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
             {steps.map((step, index) => {
               const completed = isCompleted(step.id, save);
