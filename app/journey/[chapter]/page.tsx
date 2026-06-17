@@ -251,12 +251,12 @@ function SceneReader({
           返回当前副本
         </Button>
         <div className="mt-6 overflow-hidden rounded-[8px] border border-ease-mist bg-white/72 shadow-soft">
-          <div className="grid md:grid-cols-[0.95fr_1.05fr]">
+          <div className="grid gap-0 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
             <div
               className="aspect-[4/3] bg-cover bg-center md:h-full md:min-h-[360px]"
               style={{ backgroundImage: `url(${scene.image})` }}
             />
-            <div className="flex flex-col justify-center p-5 md:p-8">
+            <div className="min-w-0 bg-white/72 p-5 md:flex md:flex-col md:justify-center md:p-8">
               <div className="flex items-center gap-3">
                 <p className="text-4xl">{scene.emoji}</p>
                 {completed && (
@@ -284,6 +284,7 @@ function SceneReader({
               <div className="mt-4 space-y-4">
                 {scene.choices.map((choice) => {
                   const split = splitChoice(choice);
+                  const preview = splitOptionPreview(split.description);
                   return (
                     <button
                       key={choice.id}
@@ -298,9 +299,14 @@ function SceneReader({
                       <span className="block text-xl font-bold leading-8 text-[#5f7f88] md:text-2xl">
                         {getSimpleChoiceTitle(choice.title)}
                       </span>
-                      {split.description.length > 0 && (
+                      {preview.lead && (
+                        <span className="mt-2 block text-sm font-medium leading-7 text-ease-ink/70">
+                          {preview.lead}
+                        </span>
+                      )}
+                      {preview.rest.length > 0 && (
                         <span className="block max-h-0 space-y-2 overflow-hidden text-sm leading-7 text-ease-ink/68 opacity-0 transition-all duration-700 ease-out group-hover:mt-4 group-hover:max-h-[28rem] group-hover:opacity-100 group-focus:mt-4 group-focus:max-h-[28rem] group-focus:opacity-100">
-                          {split.description.map((paragraph, index) => (
+                          {preview.rest.map((paragraph, index) => (
                             <span key={index} className="block whitespace-pre-line">
                               {paragraph}
                             </span>
@@ -453,6 +459,27 @@ function splitResultLead(paragraphs: string[]) {
   return { lead: match[1], rest };
 }
 
+function splitOptionPreview(paragraphs: string[]) {
+  const clean = paragraphs.map((paragraph) => paragraph.trim()).filter(Boolean);
+
+  if (clean.length === 0) {
+    return { lead: "", rest: [] };
+  }
+
+  const first = clean[0];
+  const match = first.match(/^(.+?[。！？!?])\s*([\s\S]*)$/);
+
+  if (!match) {
+    return { lead: first, rest: clean.slice(1) };
+  }
+
+  const rest = [match[2], ...clean.slice(1)].filter((paragraph) =>
+    paragraph.trim(),
+  );
+
+  return { lead: match[1], rest };
+}
+
 function getSimpleSceneTitle(title: string) {
   const normalized = title
     .replace(/^📌\s*/, "")
@@ -464,11 +491,14 @@ function getSimpleSceneTitle(title: string) {
     ["实习", "实习-面试焦虑"],
     ["留学", "留学-离开与选择"],
     ["就业", "就业-求职焦虑"],
-    ["转学", "转学-不适应"],
-    ["坐在角落", "转学-不适应"],
-    ["成绩单", "成绩-被评价"],
-    ["走廊", "少年的情愫"],
-    ["我是谁", "高三-未来方向"],
+    ["转学", "转学后不适应"],
+    ["坐在角落", "转学后不适应"],
+    ["成绩单", "中考出成绩"],
+    ["中考", "中考出成绩"],
+    ["走廊", "暗恋心事"],
+    ["暗恋", "暗恋心事"],
+    ["我是谁", "高三的思考"],
+    ["高三", "高三的思考"],
     ["试卷", "成绩-不完美"],
     ["小朋友", "表现-被看见"],
     ["操场", "同伴-想加入"],
