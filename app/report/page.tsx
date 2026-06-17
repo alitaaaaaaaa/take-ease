@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Download, Home, RotateCcw } from "lucide-react";
 import { AttributeRadar } from "@/components/AttributeRadar";
 import { GrowthTree } from "@/components/GrowthTree";
+import { JourneyProgress } from "@/components/JourneyProgress";
 import { Button } from "@/components/ui/button";
 import { attributeLabels } from "@/lib/data";
 import { loadSave, resetSave } from "@/lib/storage";
@@ -32,8 +33,9 @@ export default function Report() {
       wordChapters[wordChapters.length - 1];
 
     return (
-      <main className="grid min-h-screen place-items-center bg-ease-paper px-5 text-center text-ease-ink">
-        <section className="max-w-xl rounded-[8px] border border-ease-mist bg-white/72 p-7 shadow-soft">
+      <main className="min-h-screen bg-ease-paper text-center text-ease-ink">
+        <JourneyProgress current={requiredChapter.id} save={save} />
+        <section className="mx-auto mt-24 max-w-xl rounded-[8px] border border-ease-mist bg-white/72 p-7 shadow-soft">
           <p className="text-sm tracking-[.16em] text-ease-blue">
             成长轨迹尚未生成
           </p>
@@ -60,8 +62,9 @@ export default function Report() {
 人生不是一道标准答案。你也不需要成为别人。`;
 
   return (
-    <main className="noise relative min-h-screen bg-ease-paper px-4 py-8 text-ease-ink md:px-8">
-      <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-[1fr_380px]">
+    <main className="noise relative min-h-screen bg-ease-paper text-ease-ink">
+      <JourneyProgress current="report" save={save} />
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-[1fr_380px] md:px-8">
         <section className="rounded-[8px] border border-ease-mist bg-white/65 p-6 shadow-soft md:p-10">
           <p className="text-sm text-ease-blue">来自未来的最后一封信</p>
           <h1 className="mt-3 font-serif text-4xl md:text-5xl">

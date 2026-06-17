@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Check, Home, Sparkles } from "lucide-react";
+import { JourneyProgress } from "@/components/JourneyProgress";
 import { Button } from "@/components/ui/button";
 import { loadSave, persistSave, recordWordChoice } from "@/lib/storage";
 import { attributeLabels } from "@/lib/data";
@@ -77,8 +78,9 @@ export default function ChapterPage() {
       previousChapters.find((item) => !hasCompletedChapter(save, item.id)) ??
       wordChapters[0];
     return (
-      <main className="grid min-h-screen place-items-center bg-ease-paper px-5 text-center text-ease-ink">
-        <section className="max-w-xl rounded-[8px] border border-ease-mist bg-white/72 p-7 shadow-soft">
+      <main className="min-h-screen bg-ease-paper text-center text-ease-ink">
+        <JourneyProgress current={requiredChapter.id} save={save} />
+        <section className="mx-auto mt-24 max-w-xl rounded-[8px] border border-ease-mist bg-white/72 p-7 shadow-soft">
           <p className="text-sm tracking-[.16em] text-ease-blue">
             旅程需要按顺序展开
           </p>
@@ -100,6 +102,7 @@ export default function ChapterPage() {
     return (
       <SceneReader
         chapterId={chapter.id}
+        save={save}
         scene={activeScene}
         picked={picked}
         completed={save.completedScenes.includes(activeScene.id)}
@@ -111,6 +114,7 @@ export default function ChapterPage() {
 
   return (
     <main className="min-h-screen bg-ease-paper text-ease-ink">
+      <JourneyProgress current={chapter.id} save={save} />
       <section className="relative overflow-hidden border-b border-ease-mist/70 bg-gradient-to-br from-[#FAF8F4] via-[#F5EEDC] to-[#E8F0EE] px-4 py-10 md:px-8">
         <div className="absolute inset-0 opacity-20 [background-image:url('/assets/paper-grain.png')]" />
         <div className="relative mx-auto max-w-6xl">
@@ -223,6 +227,7 @@ function hasCompletedChapter(save: SaveState, chapterId: ChapterId) {
 
 function SceneReader({
   chapterId,
+  save,
   scene,
   picked,
   completed,
@@ -230,6 +235,7 @@ function SceneReader({
   onBack,
 }: {
   chapterId: ChapterId;
+  save: SaveState;
   scene: WordScene;
   picked: WordChoice | null;
   completed: boolean;
@@ -237,8 +243,9 @@ function SceneReader({
   onBack: () => void;
 }) {
   return (
-    <main className="min-h-screen bg-ease-paper px-4 py-6 text-ease-ink md:px-8">
-      <section className="mx-auto max-w-5xl">
+    <main className="min-h-screen bg-ease-paper text-ease-ink">
+      <JourneyProgress current={chapterId} save={save} />
+      <section className="mx-auto max-w-5xl px-4 py-6 md:px-8">
         <Button variant="paper" onClick={onBack}>
           <ArrowLeft size={17} />
           返回当前副本
@@ -269,7 +276,7 @@ function SceneReader({
           </div>
         </div>
       </section>
-      <section className="mx-auto mt-6 max-w-5xl pb-12">
+      <section className="mx-auto mt-6 max-w-5xl px-4 pb-12 md:px-8">
         {!picked ? (
           <div className="space-y-6">
             <aside className="mx-auto max-w-2xl rounded-[8px] border border-ease-mist bg-white/72 p-5 shadow-soft md:p-6">
