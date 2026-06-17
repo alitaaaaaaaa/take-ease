@@ -250,13 +250,13 @@ function SceneReader({
           <ArrowLeft size={17} />
           返回当前副本
         </Button>
-        <div className="mt-6 overflow-hidden rounded-[8px] border border-ease-mist bg-white/72 shadow-soft">
-          <div className="grid gap-0 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-            <div
-              className="aspect-[4/3] bg-cover bg-center md:h-full md:min-h-[360px]"
-              style={{ backgroundImage: `url(${scene.image})` }}
-            />
-            <div className="min-w-0 bg-white/72 p-5 md:flex md:flex-col md:justify-center md:p-8">
+        <div className="mt-6 grid gap-5 md:grid-cols-[minmax(280px,0.9fr)_minmax(360px,1.1fr)] md:items-stretch">
+          <div
+            className="min-h-[260px] overflow-hidden rounded-[8px] border border-ease-mist bg-cover bg-center shadow-soft md:min-h-[430px]"
+            style={{ backgroundImage: `url(${scene.image})` }}
+            aria-hidden
+          />
+          <div className="min-w-0 rounded-[8px] border border-ease-mist bg-white/88 p-5 shadow-soft md:flex md:flex-col md:justify-center md:p-8">
               <div className="flex items-center gap-3">
                 <p className="text-4xl">{scene.emoji}</p>
                 {completed && (
@@ -266,13 +266,12 @@ function SceneReader({
                   </p>
                 )}
               </div>
-              <h1 className="mt-4 font-serif text-4xl font-bold leading-tight text-[#5f7f88] md:text-5xl">
+              <h1 className="mt-4 break-words font-serif text-4xl font-bold leading-tight text-[#5f7f88] md:text-5xl">
                 {getSimpleSceneTitle(scene.title)}
               </h1>
               <div className="mt-5 text-sm leading-7 text-ease-ink/72 md:text-base md:leading-8">
                 <TextBlock paragraphs={getDisplayParagraphs(scene.intro)} />
               </div>
-            </div>
           </div>
         </div>
       </section>
