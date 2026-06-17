@@ -194,7 +194,7 @@ export default function ChapterPage() {
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-4 text-xl font-semibold leading-8">
+                  <h3 className="mt-4 text-2xl font-bold leading-9 text-ease-blue md:text-[28px]">
                     {getSimpleSceneTitle(scene.title)}
                   </h3>
                   <p className="mt-2 line-clamp-3 text-sm leading-7 text-ease-ink/62">
@@ -266,7 +266,7 @@ function SceneReader({
                   </p>
                 )}
               </div>
-              <h1 className="mt-4 font-serif text-3xl leading-tight md:text-4xl">
+              <h1 className="mt-4 font-serif text-4xl font-bold leading-tight text-ease-blue md:text-5xl">
                 {getSimpleSceneTitle(scene.title)}
               </h1>
               <div className="mt-5 text-sm leading-7 text-ease-ink/72 md:text-base md:leading-8">
@@ -295,11 +295,11 @@ function SceneReader({
                       }
                       className="group w-full overflow-hidden rounded-[8px] border border-ease-mist bg-ease-paper/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-ease-blue hover:bg-white hover:shadow-soft focus:border-ease-blue focus:bg-white focus:shadow-soft focus:outline-none"
                     >
-                      <span className="text-base font-semibold leading-7">
+                      <span className="block text-xl font-bold leading-8 text-ease-blue md:text-2xl">
                         {getSimpleChoiceTitle(choice.title)}
                       </span>
                       {split.description.length > 0 && (
-                        <span className="block max-h-0 space-y-2 overflow-hidden text-sm leading-7 text-ease-ink/68 opacity-0 transition-all duration-300 ease-out group-hover:mt-3 group-hover:max-h-96 group-hover:opacity-100 group-focus:mt-3 group-focus:max-h-96 group-focus:opacity-100">
+                        <span className="block max-h-0 space-y-2 overflow-hidden text-sm leading-7 text-ease-ink/68 opacity-0 transition-all duration-700 ease-out group-hover:mt-4 group-hover:max-h-[28rem] group-hover:opacity-100 group-focus:mt-4 group-focus:max-h-[28rem] group-focus:opacity-100">
                           {split.description.map((paragraph, index) => (
                             <span key={index} className="block whitespace-pre-line">
                               {paragraph}
