@@ -6,6 +6,7 @@ import { Download, Home, RotateCcw } from "lucide-react";
 import { AttributeRadar } from "@/components/AttributeRadar";
 import { GrowthTree } from "@/components/GrowthTree";
 import { JourneyProgress } from "@/components/JourneyProgress";
+import { RadarMethodology } from "@/components/RadarMethodology";
 import { Button } from "@/components/ui/button";
 import { attributeLabels } from "@/lib/data";
 import { loadSave, resetSave } from "@/lib/storage";
@@ -111,6 +112,7 @@ export default function Report() {
           <div className="rounded-[8px] border border-ease-mist bg-white/65 p-5 shadow-soft">
             <p className="text-sm text-ease-ink/55">动态成长雷达</p>
             <AttributeRadar attributes={save.attributes} />
+            <RadarMethodology />
           </div>
           <div className="rounded-[8px] border border-ease-mist bg-white/65 p-5 shadow-soft">
             <p className="mb-4 text-sm text-ease-ink/55">人生轨迹树</p>

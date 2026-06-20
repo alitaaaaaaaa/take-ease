@@ -17,7 +17,7 @@ export const wordChapters = [
         "id": "university-scene-1",
         "title": "📌 场景一：保研焦虑",
         "emoji": "✉️",
-        "image": "/assets/scene-campus-board.png",
+        "image": "/assets/scene-campus-board-v1.webp",
         "intro": [
           "大三下学期，保研工作陆续启动：成绩排名基本定型、夏令营报名通知发布、互联网上经验帖刷屏。绩点排名靠前的同学在准备材料，靠后的同学在焦虑边缘，有人已经决定放弃保研去考研，还有人在思考要不要放弃卷国内而是去留学。整个专业都弥漫着一种微妙的紧张感。"
         ],
@@ -95,7 +95,7 @@ export const wordChapters = [
         "id": "university-scene-2",
         "title": "📌 场景二：实习焦虑",
         "emoji": "✉️",
-        "image": "/assets/scene-interview.png",
+        "image": "/assets/scene-interview-v1.webp",
         "intro": [
           "到了大三下学期的暑期实习招聘季——四月份，各大公司的实习网申陆续开启，身边同学都在改简历、刷面经、海投，朋友圈里偶尔有人晒出字节、腾讯的面试邀请。",
           "你看着自己不算出彩的经历，心里也开始发慌：“我是不是也该投了？”"
@@ -165,7 +165,7 @@ export const wordChapters = [
         "id": "university-scene-3",
         "title": "📌 场景三：留学焦虑",
         "emoji": "✉️",
-        "image": "/assets/scene-library.png",
+        "image": "/assets/scene-library-v1.webp",
         "intro": [
           "大三下学期，留学申请季悄然拉开帷幕。教室、图书馆、宿舍里，总有人在刷托福雅思、翻看学校官网、跟中介打电话，而你还在纠结：语言成绩够不够？文书怎么写？去哪里更合适？家里能负担多少？你开始失眠，翻来覆去地想：“我真的适合出国吗？”🌍"
         ],
@@ -221,7 +221,7 @@ export const wordChapters = [
         "id": "university-scene-4",
         "title": "📌 场景四：就业焦虑",
         "emoji": "✉️",
-        "image": "/assets/scene-jobfair.png",
+        "image": "/assets/scene-jobfair-v1.webp",
         "intro": [
           "大三下学期，暑期实习招聘和秋招提前批已经陆续开始了。校园里到处是宣讲会的海报，班级群里时不时有人分享“某厂提前批开奖了”“某行实习笔试通知发了”。你打开电脑，看着自己那份还没更新过的简历，心里有些发慌。“要不要冲大厂？”“去中小公司会不会没发展？”“考公是不是更稳一些？”你翻来覆去地想，最终做出了自己的决定。"
         ],
@@ -309,7 +309,7 @@ export const wordChapters = [
         "id": "teen-scene-1",
         "title": "场景一：那个坐在角落的学期（初一·转学/融入）",
         "emoji": "✉️",
-        "image": "/assets/scene-cafeteria.png",
+        "image": "/assets/scene-cafeteria-v1.webp",
         "intro": [
           "你刚转学到新的班级，还没有真正融入这里。你知道班里有不同的小圈子，也能感觉到自己暂时还站在圈子外面。",
           "中午吃饭时，你端着餐盘站在餐厅里，需要决定坐到哪里。你既想有人接纳你，又害怕主动靠近后被拒绝。",
@@ -343,7 +343,7 @@ export const wordChapters = [
         "id": "teen-scene-2",
         "title": "场景二：成绩单放在饭桌上的那晚（初三·中考成绩）",
         "emoji": "✉️",
-        "image": "/assets/scene-dinner-table.png",
+        "image": "/assets/scene-dinner-table-v1.webp",
         "intro": [
           "中考成绩出来后，成绩单被放在饭桌上。你知道这张纸不只是分数，也代表父母对你努力程度的判断。",
           "饭桌上的气氛很安静。父母没有立刻批评你，但这种沉默让你更紧张。你担心他们失望，也担心自己的努力没有被看见。",
@@ -377,7 +377,7 @@ export const wordChapters = [
         "id": "teen-scene-3",
         "title": "场景三：高二的走廊（暗恋/未说出口）",
         "emoji": "✉️",
-        "image": "/assets/scene-school-corridor.png",
+        "image": "/assets/scene-school-corridor-v1.webp",
         "intro": [
           "高二的一个晚上，你在走廊里看见喜欢的人准备离开。你们认识很久了，但你一直没有把心意说出口。",
           "你口袋里有一封没写完的信。你不知道现在表达会不会影响关系，也不知道如果一直不说，之后会不会后悔。",
@@ -411,7 +411,7 @@ export const wordChapters = [
         "id": "teen-scene-4",
         "title": "场景四：高三的\"我是谁\"（身份认同/未来方向）",
         "emoji": "✉️",
-        "image": "/assets/scene-future-classroom.png",
+        "image": "/assets/scene-future-classroom-v1.webp",
         "intro": [
           "高三下学期，你每天都在复习、考试和排名之间循环。大家都在往同一个目标冲刺，你也努力跟上节奏。",
           "但某个普通的下午，你突然开始想：如果不看成绩、不看学校、不看别人期待，我到底想成为什么样的人？",
@@ -459,7 +459,7 @@ export const wordChapters = [
         "id": "childhood-scene-1",
         "title": "场景一：成绩焦虑——那张没有满分的试卷",
         "emoji": "✉️",
-        "image": "/assets/scene-exam-paper.png",
+        "image": "/assets/scene-exam-paper-v1.webp",
         "intro": [
           "你把数学试卷放进书包最里面。那不是一张很差的试卷，红色的分数甚至比大多数同学都高。可你知道，回到家后，大人第一眼看到的可能不是你做对了多少题，而是那几道空出来的地方。晚饭后，母亲问你：“试卷发了吗？”",
           "你最担心的是：如果我没有考好，爸爸妈妈是不是就会失望？如果我不是最优秀的，是不是就不值得被表扬？如果我犯了错，是不是说明我不够好？"
@@ -521,7 +521,7 @@ export const wordChapters = [
         "id": "childhood-scene-2",
         "title": "场景二：表现焦虑——被选中的小朋友",
         "emoji": "✉️",
-        "image": "/assets/scene-stage.png",
+        "image": "/assets/scene-stage-v1.webp",
         "intro": [
           "学校要举行讲故事比赛，老师希望你代表班级参加。你其实有点害怕站在台上，但心里又隐隐期待被大家看见。放学后，你把这件事告诉父母。父亲说，这是锻炼的好机会；母亲却担心你耽误功课。",
           "你最担心的是：如果我上台忘词怎么办？如果大家笑我怎么办？如果我喜欢这件事，但大人觉得它不重要怎么办？如果我不够优秀，是不是就不该站到别人面前？"
@@ -583,7 +583,7 @@ export const wordChapters = [
         "id": "childhood-scene-3",
         "title": "场景三：同伴焦虑——操场边的位置",
         "emoji": "✉️",
-        "image": "/assets/scene-playground.png",
+        "image": "/assets/scene-playground-v1.webp",
         "intro": [
           "课间休息时，几个同学正在玩游戏。你很想加入，但他们没有主动叫你。你站在操场边，手里捏着跳绳的一端。阳光很亮，大家的笑声很近，可你忽然觉得自己像站在一扇没有打开的门外。你最担心的是：如果我主动过去，他们不理我怎么办？如果我被拒绝，是不是说明我不讨人喜欢？如果没有人选择我，我是不是就只能一个人？如果我表现得太想加入，会不会很丢脸？"
         ],
@@ -643,7 +643,7 @@ export const wordChapters = [
         "id": "childhood-scene-4",
         "title": "场景四：兴趣焦虑——那支被收起来的画笔",
         "emoji": "✉️",
-        "image": "/assets/scene-drawing-desk.png",
+        "image": "/assets/scene-drawing-desk-v1.webp",
         "intro": [
           "周末下午，你趴在桌上画画。你画了一片蓝色的森林，树上长着星星，河流从天空流下来。你觉得它很好看。这时，大人走过来说：“画画可以当兴趣，但作业写完了吗？”你看着那盒彩笔，忽然不知道该继续画，还是把它收起来。你最担心的是：如果我喜欢的东西没有用怎么办？如果它不能变成成绩，是不是就不值得花时间？如果我坚持自己的兴趣，会不会被认为不懂事？如果我放下它，我以后还会记得自己喜欢什么吗？"
         ],

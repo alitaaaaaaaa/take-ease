@@ -8,14 +8,14 @@ import { Button } from "@/components/ui/button";
 import { resetSave } from "@/lib/storage";
 
 const coverImages = [
-  "/assets/scene-campus-board.png",
-  "/assets/scene-interview.png",
-  "/assets/scene-library.png",
-  "/assets/scene-jobfair.png",
-  "/assets/scene-cafeteria.png",
-  "/assets/scene-dinner-table.png",
-  "/assets/scene-school-corridor.png",
-  "/assets/scene-drawing-desk.png",
+  "/assets/scene-campus-board-v1.webp",
+  "/assets/scene-interview-v1.webp",
+  "/assets/scene-library-v1.webp",
+  "/assets/scene-jobfair-v1.webp",
+  "/assets/scene-cafeteria-v1.webp",
+  "/assets/scene-dinner-table-v1.webp",
+  "/assets/scene-school-corridor-v1.webp",
+  "/assets/scene-drawing-desk-v1.webp",
 ];
 
 export default function Home() {
