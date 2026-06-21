@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Check, Home, Sparkles } from "lucide-react";
@@ -47,6 +48,10 @@ export default function ChapterPage() {
     persistSave(next);
     setSave(next);
     setPicked(choice);
+    track("Scene completed", {
+      chapter: chapter.id,
+      scene: scene.id,
+    });
   };
 
   const backToHub = () => {
@@ -57,6 +62,15 @@ export default function ChapterPage() {
   const currentIndex = wordChapters.findIndex((item) => item.id === chapter.id);
   const nextChapter = wordChapters[currentIndex + 1];
   const previousChapters = wordChapters.slice(0, Math.max(0, currentIndex));
+
+  const goToNextChapter = () => {
+    if (!nextChapter) return;
+    track("Chapter advanced", {
+      from: chapter.id,
+      to: nextChapter.id,
+    });
+    router.push(`/journey/${nextChapter.id}`);
+  };
 
   if (!save) {
     return (
@@ -161,7 +175,7 @@ export default function ChapterPage() {
           </div>
           {canGoNext && nextChapter && (
             <button
-              onClick={() => router.push(`/journey/${nextChapter.id}`)}
+              onClick={goToNextChapter}
               className="hidden rounded-[8px] border border-ease-mist bg-white/60 px-4 py-2 text-sm text-ease-ink/70 transition hover:bg-white md:block"
             >
               前往{nextChapter.subtitle}
@@ -177,6 +191,10 @@ export default function ChapterPage() {
                 onClick={() => {
                   setPicked(null);
                   setActiveSceneId(scene.id);
+                  track("Scene opened", {
+                    chapter: chapter.id,
+                    scene: scene.id,
+                  });
                 }}
                 className="group overflow-hidden rounded-[8px] border border-ease-mist bg-white/70 text-left shadow-soft transition hover:-translate-y-0.5 hover:bg-white"
               >
@@ -210,7 +228,7 @@ export default function ChapterPage() {
             <Button
               variant="paper"
               className="w-full"
-              onClick={() => router.push(`/journey/${nextChapter.id}`)}
+              onClick={goToNextChapter}
             >
               前往{nextChapter.subtitle}
             </Button>

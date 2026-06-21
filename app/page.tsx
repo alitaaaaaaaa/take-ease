@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { motion } from "framer-motion";
 import { ArrowRight, RotateCcw } from "lucide-react";
 import { FloatingLetters } from "@/components/FloatingLetters";
@@ -55,7 +56,10 @@ export default function Home() {
           transition={{ delay: 0.24 }}
           className="mt-12 flex flex-wrap justify-center gap-5"
         >
-          <Link href="/journey/university">
+          <Link
+            href="/journey/university"
+            onClick={() => track("Journey started")}
+          >
             <Button className="min-h-14 px-8 text-base md:text-lg">
               <ArrowRight size={18} />
               开始我的旅程
@@ -65,6 +69,7 @@ export default function Home() {
             variant="ghost"
             className="min-h-14 px-8 text-base md:text-lg"
             onClick={() => {
+              track("Journey reset");
               resetSave();
             }}
           >

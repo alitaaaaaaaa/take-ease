@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { Download, Home, RotateCcw } from "lucide-react";
 import { AttributeRadar } from "@/components/AttributeRadar";
@@ -16,7 +17,15 @@ import { wordChapters } from "@/lib/wordData";
 export default function Report() {
   const [save, setSave] = useState<SaveState | null>(null);
 
-  useEffect(() => setSave(loadSave()), []);
+  useEffect(() => {
+    const next = loadSave();
+    setSave(next);
+    if (next.unlockedReport) {
+      track("Report viewed", {
+        completedScenes: next.completedScenes.length,
+      });
+    }
+  }, []);
 
   const top = useMemo(() => {
     if (!save) return [];
