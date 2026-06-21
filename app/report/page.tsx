@@ -71,19 +71,33 @@ export default function Report() {
 
 人生不是一道标准答案。你也不需要成为别人。`;
 
+  const saveLetter = () => {
+    const previousTitle = document.title;
+    document.title = "Take Ease - 来自未来的最后一封信";
+    track("Letter saved");
+
+    const restoreTitle = () => {
+      document.title = previousTitle;
+      window.removeEventListener("afterprint", restoreTitle);
+    };
+
+    window.addEventListener("afterprint", restoreTitle);
+    window.print();
+  };
+
   return (
     <main className="noise relative min-h-screen bg-ease-paper text-ease-ink">
       <JourneyProgress current="report" save={save} />
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-[1fr_380px] md:px-8">
-        <section className="rounded-[8px] border border-ease-mist bg-white/65 p-6 shadow-soft md:p-10">
-          <p className="text-sm text-ease-blue">来自未来的最后一封信</p>
-          <h1 className="mt-3 font-serif text-4xl md:text-5xl">
+        <section className="print-letter rounded-[8px] border border-ease-mist bg-white/65 p-6 shadow-soft md:p-10">
+          <p className="print-letter-kicker text-sm text-ease-blue">来自未来的最后一封信</p>
+          <h1 className="print-letter-title mt-3 font-serif text-4xl md:text-5xl">
             你不是出了问题
           </h1>
-          <div className="mt-8 whitespace-pre-wrap rounded-[8px] bg-[#f7edcf] p-6 font-serif text-lg leading-9 shadow-soft">
+          <div className="print-letter-body mt-8 whitespace-pre-wrap rounded-[8px] bg-[#f7edcf] p-6 font-serif text-lg leading-9 shadow-soft">
             {final}
           </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="print-letter-keywords mt-8 grid gap-4 md:grid-cols-3">
             {top.map((keyword) => (
               <div
                 key={keyword}
@@ -94,10 +108,10 @@ export default function Report() {
               </div>
             ))}
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button onClick={() => window.print()}>
+          <div className="print-hide mt-8 flex flex-wrap gap-3">
+            <Button onClick={saveLetter}>
               <Download size={17} />
-              保存这封信
+              保存为 PDF
             </Button>
             <Link href="/">
               <Button variant="paper">
@@ -117,7 +131,7 @@ export default function Report() {
             </Button>
           </div>
         </section>
-        <aside className="space-y-5">
+        <aside className="print-hide space-y-5">
           <div className="rounded-[8px] border border-ease-mist bg-white/65 p-5 shadow-soft">
             <p className="text-sm text-ease-ink/55">动态成长雷达</p>
             <AttributeRadar attributes={save.attributes} />

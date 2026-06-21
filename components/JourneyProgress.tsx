@@ -25,7 +25,7 @@ export function JourneyProgress({ current, save }: JourneyProgressProps) {
   const activeIndex = steps.findIndex((step) => step.id === current);
 
   return (
-    <nav className="sticky top-0 z-30 border-b border-ease-mist/70 bg-[#FAF8F4]/88 px-4 py-3 text-ease-ink shadow-[0_12px_35px_rgba(58,58,58,.06)] backdrop-blur-xl md:px-8">
+    <nav className="journey-progress sticky top-0 z-30 border-b border-ease-mist/70 bg-[#FAF8F4]/88 px-4 py-3 text-ease-ink shadow-[0_12px_35px_rgba(58,58,58,.06)] backdrop-blur-xl md:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-2 flex items-center justify-between gap-3">
           <p className="text-xs font-medium tracking-[.18em] text-ease-blue">
